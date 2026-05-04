@@ -19,6 +19,10 @@ export default function LoginPage() {
   const [showDropdown, setShowDropdown] = useState(false)
 
   useEffect(() => {
+    // Set body background to match login page to prevent blue overscroll/safe-area artifacts on mobile
+    const originalBodyBg = document.body.style.backgroundColor
+    document.body.style.backgroundColor = '#f4f7fc'
+
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setShowDropdown(false)
@@ -26,7 +30,10 @@ export default function LoginPage() {
     }
 
     document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.body.style.backgroundColor = originalBodyBg
+    }
   }, [])
 
   if (isAuthenticated) {
